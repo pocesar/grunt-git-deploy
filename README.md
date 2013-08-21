@@ -1,6 +1,6 @@
 # grunt-git-selective-deploy
 
-> Deploy files to any branch of any remote git repository.
+> Create a new branch on-the-fly from your git repo and selectively deploy files to any remote branch.
 
 ## Getting Started
 
