@@ -9,13 +9,13 @@ This plugin requires Grunt `~0.4.1`
 If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
 
 ```shell
-npm install grunt-git-deploy --save-dev
+npm install grunt-git-selective-deploy --save-dev
 ```
 
 Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
 
 ```js
-grunt.loadNpmTasks('grunt-git-deploy');
+grunt.loadNpmTasks('grunt-git-selective-deploy');
 ```
 
 ## The "git_deploy" task
@@ -55,24 +55,50 @@ Type: `String`
 
 The URL to a remote git repository. This option is required.
 
-#### options.branch
+#### options.localBranch
 
 Type: `String`
-Default value: `'gh-pages'`
+Default value: `'master'`
 
-The branch to push to.
+The local branch to create a new branch from.
+
+#### options.remoteBranch
+
+Type: `String`
+Default value: `'master'`
+
+The remote branch to push to.
 
 #### options.message
 
 Type: `String`
-Default value: `'autocommit'`
+Default value: `'git deploy'`
 
-Commit message.
+Commit message. You may use grunt template language `<% %>` in this message, like to pass in a version for example, automatically.
+
+```js
+pkg: grunt.file.readJSON('package.json'),
+//...
+    options:{
+        message: 'commit v<%= pkg.version %>'
+    }
+```
+
+#### options.quiet
+
+Type: `Boolean`
+Default value: `true`
+
+Set to false to see git results.
 
 #### options.ignore
 
 Type: `Array`
-Default value: ` ['Gruntfile.js','node_modules','nbproject','README.md','test','**/*.scss','**/*.sass','.sass-cache','.idea','.DS_Store','config.rb']`
+Default value:
+
+```js
+['Gruntfile.js','node_modules','nbproject','README.md','test','**/*.scss','**/*.sass','.sass-cache','.idea','.DS_Store','config.rb']
+```
 
 Ignore files on-the-fly to avoid development files to be commited to the server. This will fill new git repo root `.gitignore` with
 all the found files and folders.

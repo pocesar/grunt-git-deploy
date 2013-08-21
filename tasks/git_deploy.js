@@ -11,16 +11,19 @@
 var path = require("path");
 
 module.exports = function(grunt) {
-  var file = grunt.file;
-  var spawn = grunt.util.spawn;
+  var
+    file = grunt.file,
+    spawn = grunt.util.spawn;
 
   grunt.registerMultiTask('git_deploy', 'Push files to a git remote.', function() {
     // Merge task options with these defaults.
     var options = this.options({
       message: 'git deploy',
-      branch: 'gh-pages',
+      localBranch: 'master',
+      remoteBranch: 'master',
       ignore: ['.gitignore','Gruntfile.js','node_modules','nbproject','README.md','test','**/*.scss','**/*.sass','.sass-cache','.idea','.DS_Store','config.rb'],
-      ignoreAppend: false
+      ignoreAppend: false,
+      quiet: true
     });
 
     if (!options.url) {
@@ -37,18 +40,27 @@ module.exports = function(grunt) {
 
     function git(args) {
       return function(cb) {
-        grunt.log.writeln('Running ' + args.join(' ').green);
+        grunt.log.writeln('\n>> '.cyan + 'Running git ' + args.join(' ').green + '\n');
         spawn({
           cmd: 'git',
           args: args,
           opts: {cwd: src}
-        }, cb);
+        }, function(err, result){
+          if (options.quiet === false) {
+            if (err) {
+              grunt.log.error(err);
+            } else if (result && (result.stderr || result.stdout)) {
+              grunt.log.writeln(result.stderr || result.stdout);
+            }
+          }
+          cb(err, '');
+        });
       };
     }
 
     function buildIgnore() {
       return function(cb) {
-        grunt.log.writeln('Creating ' + '.gitignore'.cyan);
+        grunt.log.writeln('\n>> '.cyan + 'Creating ' + '.gitignore'.cyan + '\n');
 
         var
           gitignore = path.join(src, '.gitignore'),
@@ -72,8 +84,10 @@ module.exports = function(grunt) {
       };
     }
 
-    if (file.isDir(path.join(src, '.git'))) {
-      grunt.file.delete(path.join(src, '.git'));
+    var dotgit = path.join(src, '.git');
+
+    if (file.isDir(dotgit)) {
+      grunt.file.delete(dotgit);
     }
 
     var done = this.async();
@@ -81,10 +95,10 @@ module.exports = function(grunt) {
     grunt.util.async.series([
       git(['init']),
       buildIgnore(),
-      git(['checkout', '--orphan', options.branch]),
+      git(['checkout', '--orphan', options.localBranch]),
       git(['add', '--all']),
       git(['commit', '--message="' + options.message + '"']),
-      git(['push', '--prune', '--force', '--quiet', options.url, options.branch])
+      git(['push', '--prune', '--force'].concat(options.quiet ? ['--quiet'] : []).concat([options.url, options.localBranch + ':' + options.remoteBranch]))
     ], done);
 
   });

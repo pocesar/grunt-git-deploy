@@ -1,8 +1,7 @@
 {
-  "name": "grunt-git-deploy",
-  "description": "Selectively deploy files to any branch of any remote git repository.",
+  "name": "grunt-git-selective-deploy",
+  "description": "Create a new branch on-the-fly from your git repo and selectively deploy files to any remote branch.",
   "version": "0.2.0",
-  "homepage": "https://github.com/iclanzan/grunt-git-deploy",
   "author": {
     "name": "Sorin Iclanzan",
     "email": "sorin@iclanzan.com",
@@ -10,15 +9,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/iclanzan/grunt-git-deploy.git"
-  },
-  "bugs": {
-    "url": "https://github.com/iclanzan/grunt-git-deploy/issues"
+    "url": "git://github.com/pocesar/grunt-git-deploy.git"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/iclanzan/grunt-git-deploy/blob/master/LICENSE-MIT"
+      "url": "https://github.com/pocesar/grunt-git-deploy/blob/master/LICENSE-MIT"
     }
   ],
   "main": "Gruntfile.js",
@@ -39,8 +35,10 @@
   },
   "keywords": [
     "gruntplugin",
+    "grunt",
     "git",
     "deploy",
-    "push"
+    "push",
+    "remote"
   ]
 }

@@ -33,6 +33,7 @@ module.exports = function(grunt) {
 
   // Project configuration.
   grunt.initConfig({
+    pkg: grunt.file.readJSON('package.json'),
 
     // Before generating any new files, remove any previously-created files.
     clean: {
@@ -64,7 +65,10 @@ module.exports = function(grunt) {
     git_deploy: {
       default_options: {
         options: {
-          url: '../repo'
+          url: '../repo',
+          localBranch: 'gh-pages',
+          remoteBranch: 'gh-pages',
+          message: 'deploying <%= pkg.name %> v<%= pkg.version %> to <%= grunt.config.get("git_deploy.default_options.options.url") %>'
         },
         src: 'tmp/src'
       }
@@ -76,6 +80,7 @@ module.exports = function(grunt) {
     }
 
   });
+
 
   // Actually load this plugin's task(s).
   grunt.loadTasks('tasks');
