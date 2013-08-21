@@ -1,4 +1,4 @@
-# grunt-git-deploy
+# grunt-git-selective-deploy
 
 > Deploy files to any branch of any remote git repository.
 
