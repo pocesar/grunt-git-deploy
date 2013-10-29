@@ -110,6 +110,24 @@ Default value: `false`
 
 If set to true, will try to merge an existing `.gitignore` if it exists in `src` and append the ignored files in it.
 
+#### options.buildIgnore
+
+Type: `Boolean`
+Default value: `true`
+
+If set to false, no `.gitignore` file will be written in the created
+repo (if a `.gitignore` file already exists, it will not be modified).
+When this option is false, the `ignoreAppend` and `ignore` options have
+no effect.
+
+#### options.pretend
+
+Type: `Boolean`
+Default value: `false`
+
+If set to true, this task will log each git command without actually
+performing it.
+
 ## Contributing
 
 If you can think of a way to unit test this plugin please take a shot at it.
