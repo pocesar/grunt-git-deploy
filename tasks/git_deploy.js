@@ -26,11 +26,12 @@ module.exports = function(grunt) {
       ignoreAppend: false,
       quiet: true,
       buildIgnore: true,
-      pretend: false
+      pretend: false,
+      url: process.env.GIT_DEPLOY_URL
     });
 
-    if (!options.url) {
-      grunt.fail.warn('The URL to a remote git repository is required.');
+    if (!options.url){
+      grunt.fail.warn('The URL to a remote git repository is required to be set in config or as process.env.GIT_DEPLOY_URL');
       return false;
     }
 

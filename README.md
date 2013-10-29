@@ -53,7 +53,8 @@ grunt git_deploy your_target
 
 Type: `String`
 
-The URL to a remote git repository. This option is required.
+The URL to a remote git repository. Defaults to the environment variable
+`GIT_DEPLOY_URL`, if not specified. The url is required to be present.
 
 #### options.localBranch
 
