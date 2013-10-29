@@ -33,7 +33,11 @@ grunt.initConfig({
   git_deploy: {
     your_target: {
       options: {
-        url: 'git@github.com:example/repo.git'
+        url: 'git@github.com:example/repo.git', // the url is read from
+                                                // process.env.GIT_DEPLOY_URL
+                                                // if not specified here
+        pretend: false,   // when true, logs but doesn't perform git commands
+        buildIgnore: true, // then false, does not append or create a .gitignore file
       },
       src: 'directory/to/deploy' // you may use . for the current directory that Gruntfile.js is
     },
@@ -44,7 +48,7 @@ grunt.initConfig({
 and execute it from the command line
 
 ```bash
-grunt git_deploy your_target
+grunt git_deploy:your_target
 ```
 
 ### Options
