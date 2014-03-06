@@ -33,7 +33,11 @@ grunt.initConfig({
   git_deploy: {
     your_target: {
       options: {
-        url: 'git@github.com:example/repo.git'
+        url: 'git@github.com:example/repo.git', // the url is read from
+                                                // process.env.GIT_DEPLOY_URL
+                                                // if not specified here
+        pretend: false,   // when true, logs but doesn't perform git commands
+        buildIgnore: true, // then false, does not append or create a .gitignore file
       },
       src: 'directory/to/deploy' // you may use . for the current directory that Gruntfile.js is
     },
@@ -44,7 +48,7 @@ grunt.initConfig({
 and execute it from the command line
 
 ```bash
-grunt git_deploy your_target
+grunt git_deploy:your_target
 ```
 
 ### Options
@@ -53,7 +57,8 @@ grunt git_deploy your_target
 
 Type: `String`
 
-The URL to a remote git repository. This option is required.
+The URL to a remote git repository. Defaults to the environment variable
+`GIT_DEPLOY_URL`, if not specified. The url is required to be present.
 
 #### options.localBranch
 
@@ -109,6 +114,24 @@ Type: `Boolean`
 Default value: `false`
 
 If set to true, will try to merge an existing `.gitignore` if it exists in `src` and append the ignored files in it.
+
+#### options.buildIgnore
+
+Type: `Boolean`
+Default value: `true`
+
+If set to false, no `.gitignore` file will be written in the created
+repo (if a `.gitignore` file already exists, it will not be modified).
+When this option is false, the `ignoreAppend` and `ignore` options have
+no effect.
+
+#### options.pretend
+
+Type: `Boolean`
+Default value: `false`
+
+If set to true, this task will log each git command without actually
+performing it.
 
 ## Contributing
 
