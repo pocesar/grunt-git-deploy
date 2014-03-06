@@ -53,28 +53,28 @@ grunt git_deploy:your_target
 
 ### Options
 
-#### options.url
+#### `options.url`
 
 Type: `String`
 
 The URL to a remote git repository. Defaults to the environment variable
 `GIT_DEPLOY_URL`, if not specified. The url is required to be present.
 
-#### options.localBranch
+#### `options.localBranch`
 
 Type: `String`
 Default value: `'master'`
 
 The local branch to create a new branch from.
 
-#### options.remoteBranch
+#### `options.remoteBranch`
 
 Type: `String`
 Default value: `'master'`
 
 The remote branch to push to.
 
-#### options.message
+#### `options.message`
 
 Type: `String`
 Default value: `'git deploy'`
@@ -89,14 +89,14 @@ pkg: grunt.file.readJSON('package.json'),
     }
 ```
 
-#### options.quiet
+#### `options.quiet`
 
 Type: `Boolean`
 Default value: `true`
 
 Set to false to see git results.
 
-#### options.ignore
+#### `options.ignore`
 
 Type: `Array`
 Default value:
@@ -108,14 +108,14 @@ Default value:
 Ignore files on-the-fly to avoid development files to be commited to the server. This will fill new git repo root `.gitignore` with
 all the found files and folders.
 
-#### options.ignoreAppend
+#### `options.ignoreAppend`
 
 Type: `Boolean`
 Default value: `false`
 
 If set to true, will try to merge an existing `.gitignore` if it exists in `src` and append the ignored files in it.
 
-#### options.buildIgnore
+#### `options.buildIgnore`
 
 Type: `Boolean`
 Default value: `true`
@@ -125,7 +125,7 @@ repo (if a `.gitignore` file already exists, it will not be modified).
 When this option is false, the `ignoreAppend` and `ignore` options have
 no effect.
 
-#### options.pretend
+#### `options.pretend`
 
 Type: `Boolean`
 Default value: `false`
