@@ -18,6 +18,10 @@ Once the plugin has been installed, it may be enabled inside your Gruntfile with
 grunt.loadNpmTasks('grunt-git-selective-deploy');
 ```
 
+**WARNING: This task is "destructive", it means it may alter your working copy. Only run this on your "dest" folder, that is
+ the folder that you intend to deploy to your server. Don't execute this task on your working copy dir unless you know
+ what you are doing. Always test with `'pretend':true` before.**
+
 ## The "git_deploy" task
 
 ### Overview
@@ -39,7 +43,8 @@ grunt.initConfig({
         pretend: false,   // when true, logs but doesn't perform git commands
         buildIgnore: true, // then false, does not append or create a .gitignore file
       },
-      src: 'directory/to/deploy' // you may use . for the current directory that Gruntfile.js is
+      src: 'directory/to/deploy', // you may use . for the current directory that Gruntfile.js is
+      dst: './dist/' // if you don't specify this, it WILL ALTER YOUR WORKING COPY
     },
   },
 })
@@ -132,6 +137,13 @@ Default value: `false`
 
 If set to true, this task will log each git command without actually
 performing it.
+
+####``options.keepDest`
+
+Type: `Boolean`
+Default value: `false`
+
+Keeps the `dest` clone so you can inspect to see if everything is ok
 
 ## Contributing
 
