@@ -21,6 +21,8 @@ module.exports = function(grunt) {
       message: 'git deploy',
       localBranch: 'master',
       remoteBranch: 'master',
+      noOrphan: false,
+      noPrune: false,
       ignore: ['.gitignore','Gruntfile.js','node_modules','nbproject','README.md','test','**/*.scss','**/*.sass','.sass-cache','.idea','.DS_Store','config.rb'],
       ignoreAppend: false,
       quiet: true,
@@ -62,6 +64,9 @@ module.exports = function(grunt) {
 
     function git(args, where) {
       return function(cb) {
+        if (!args.length) {
+          return cb();
+        }
         if (!options.pretend) {
           grunt.log.ok('Running git', args.join(' ').green);
           grunt.util.spawn({
@@ -110,9 +115,24 @@ module.exports = function(grunt) {
           }
         }
 
+        var ignore = [], negations = [];
+
+        options.ignore.forEach(function(p){
+          if (p.charAt(0) === '!'){
+            file.expand({cwd: src}, [p.slice(1)]).forEach(function(s){
+              negations.push('!' + s);
+            });
+          } else {
+            ignore.push(p);
+          }
+        });
+
         append = append + (file.expand({
-              cwd: src
-            }, options.ignore).join('\n'));
+              cwd: src,
+              filter: function(p){
+                return p.indexOf(dest) === -1;
+              }
+            }, ignore).concat(negations).join('\n'));
 
         if (!options.pretend) {
           file.write(
@@ -131,11 +151,13 @@ module.exports = function(grunt) {
     function removeDotGit(){
       return function(cb){
         if (file.isDir(dotgit)) {
-          if (!options.pretend) {
-            grunt.log.ok('Removing', dotgit.cyan);
-            grunt.file.delete(dotgit);
-          } else {
-            grunt.log.ok('Would remove', dotgit.cyan, 'folder');
+          if (!options.keepDest) {
+            if (!options.pretend) {
+              grunt.log.ok('Removing', dotgit.cyan);
+              grunt.file.delete(dotgit);
+            } else {
+              grunt.log.ok('Would remove', dotgit.cyan, 'folder');
+            }
           }
         }
         cb();
@@ -161,7 +183,11 @@ module.exports = function(grunt) {
     var done = this.async(), cmds = [];
 
     if (isWorkingCopy) {
-      cmds.push(git(['clone', '--local', dotgit, dest]));
+      if (options.keepDest && file.isDir(dest)) {
+        cmds.push(git(['pull', '--force', dotgit], dest));
+      } else {
+        cmds.push(git(['clone', '--local', dotgit, dest]));
+      }
     }
 
     if (dest) {
@@ -171,12 +197,20 @@ module.exports = function(grunt) {
 
     grunt.util.async.series(cmds.concat([
       removeDotGit(),
-      git(['init'], where),
+      git(options.noOrphan ? [] : ['init'], where),
       buildIgnore(),
-      git(['checkout', '--orphan', options.localBranch], where),
+      git(options.keepDest && file.isDir(where) ?
+        [] :
+        ['checkout'].concat(options.noOrphan === true ? [] : ['--orphan']).concat([options.localBranch]), where),
       git(['add', '--all'], where),
-      git(['commit', '--message="' + options.message + '"'], where),
-      git(['push', '--prune', '--force'].concat(options.quiet ? ['--quiet'] : []).concat([options.url, options.localBranch + ':' + options.remoteBranch]), where),
+      git(isWorkingCopy && options.keepDest ?
+        [] :
+        ['commit', '--message="' + options.message + '"'], where),
+      git(
+        ['push']
+          .concat(options.noPrune === true ? [] : ['--prune'])
+          .concat(['--force']).concat(options.quiet ? ['--quiet'] : [])
+          .concat([options.url, options.localBranch + ':' + options.remoteBranch]), where),
       removeDotGit(),
       cleanup()
     ]), function(err, results){

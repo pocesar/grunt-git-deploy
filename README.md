@@ -107,11 +107,36 @@ Type: `Array`
 Default value:
 
 ```js
-['Gruntfile.js','node_modules','nbproject','README.md','test','**/*.scss','**/*.sass','.sass-cache','.idea','.DS_Store','config.rb']
+['.gitignore',
+'Gruntfile.js',
+'node_modules',
+'nbproject',
+'README.md',
+'test',
+'**/*.scss',
+'**/*.sass',
+'.sass-cache',
+'.idea',
+'.DS_Store',
+'config.rb']
 ```
 
 Ignore files on-the-fly to avoid development files to be commited to the server. This will fill new git repo root `.gitignore` with
 all the found files and folders.
+
+#### `options.noOrphan`
+
+Type: `Boolean`
+Default value: `false`
+
+Add the `--orphan` to `git checkout` command
+
+#### `options.noPrune`
+
+Type: `Boolean`
+Default value: `false`
+
+Add the `--prune` to `git commit` command
 
 #### `options.ignoreAppend`
 
