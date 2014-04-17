@@ -184,7 +184,7 @@ module.exports = function(grunt) {
 
     if (isWorkingCopy) {
       if (options.keepDest && file.isDir(dest)) {
-        cmds.push(git(['pull', '--force', dotgit], dest));
+        cmds.push(git(['fetch', '--force', dotgit], dest));
       } else {
         cmds.push(git(['clone', '--local', dotgit, dest]));
       }
@@ -200,10 +200,10 @@ module.exports = function(grunt) {
       git(options.noOrphan ? [] : ['init'], where),
       buildIgnore(),
       git(options.keepDest && file.isDir(where) ?
-        [] :
+        ['merge','FETCH_HEAD'] :
         ['checkout'].concat(options.noOrphan === true ? [] : ['--orphan']).concat([options.localBranch]), where),
       git(['add', '--all'], where),
-      git(isWorkingCopy && options.keepDest ?
+      git(options.keepDest && file.isDir(where) ?
         [] :
         ['commit', '--message="' + options.message + '"'], where),
       git(

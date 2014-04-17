@@ -1,7 +1,7 @@
 {
   "name": "grunt-git-selective-deploy",
   "description": "Create a new branch on-the-fly from your git repo and selectively deploy files to any remote branch.",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "author": {
     "name": "Sorin Iclanzan",
     "email": "sorin@iclanzan.com",
